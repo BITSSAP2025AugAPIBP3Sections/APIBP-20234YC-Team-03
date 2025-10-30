@@ -23,10 +23,9 @@ To design and implement a Spring Boot (Java) application offering both REST and 
 ## Modules
 - User Management (registration, login, profile)  
 - Property Management (listings, updates, deletions)  
-- Booking & Reservation  
-- Payment Integration  
+- Booking & Reservation
 - Reviews & Ratings  
-- Admin Panel  
+- Admin Panel
 
 ---
 
