@@ -1,0 +1,588 @@
+openapi: 3.0.3
+info:
+  title: DwellIn API
+  version: 1.0.0
+  description: API for the DwellIn home-rental platform.
+servers:
+  - url: https://api.dwellin.example.com/v1
+paths:
+  /users:
+    post:
+      summary: Create a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    get:
+      summary: List users
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+  /users/{userId}:
+    get:
+      summary: Get user by ID
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    put:
+      summary: Update user
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdate'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    delete:
+      summary: Delete user
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: No Content
+
+  /properties:
+    post:
+      summary: Create a new property listing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PropertyCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Property'
+    get:
+      summary: List all properties
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: size
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Property'
+  /properties/{propertyId}:
+    get:
+      summary: Get property details
+      parameters:
+        - name: propertyId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Property'
+    put:
+      summary: Update property listing
+      parameters:
+        - name: propertyId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PropertyUpdate'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Property'
+    delete:
+      summary: Delete property listing
+      parameters:
+        - name: propertyId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: No Content
+
+  /bookings:
+    post:
+      summary: Create a new booking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+    get:
+      summary: List bookings (for admin/all or filter by user)
+      parameters:
+        - name: userId
+          in: query
+          schema:
+            type: integer
+        - name: ownerId
+          in: query
+          schema:
+            type: integer
+        - name: status
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Booking'
+  /bookings/{bookingId}:
+    get:
+      summary: Get booking details
+      parameters:
+        - name: bookingId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+    put:
+      summary: Update booking (e.g., change status)
+      parameters:
+        - name: bookingId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingStatusUpdate'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+    delete:
+      summary: Cancel booking
+      parameters:
+        - name: bookingId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: No Content
+
+  /reviews:
+    post:
+      summary: Submit a review for a property
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+    get:
+      summary: List reviews for a property
+      parameters:
+        - name: propertyId
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Review'
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+        fullName:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - username
+        - email
+
+    UserCreate:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        fullName:
+          type: string
+      required:
+        - username
+        - email
+        - password
+
+    UserUpdate:
+      type: object
+      properties:
+        email:
+          type: string
+        fullName:
+          type: string
+
+    Property:
+      type: object
+      properties:
+        id:
+          type: integer
+        ownerId:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        address:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        pricePerNight:
+          type: number
+          format: float
+        maxGuests:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - ownerId
+        - title
+        - address
+        - pricePerNight
+
+    PropertyCreate:
+      type: object
+      properties:
+        ownerId:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        address:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        pricePerNight:
+          type: number
+          format: float
+        maxGuests:
+          type: integer
+      required:
+        - ownerId
+        - title
+        - address
+        - pricePerNight
+
+    PropertyUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        address:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        pricePerNight:
+          type: number
+          format: float
+        maxGuests:
+          type: integer
+
+    Booking:
+      type: object
+      properties:
+        id:
+          type: integer
+        guestId:
+          type: integer
+        propertyId:
+          type: integer
+        checkInDate:
+          type: string
+          format: date
+        checkOutDate:
+          type: string
+          format: date
+        guestCount:
+          type: integer
+        bookingMode:
+          type: string
+          enum:
+            - INSTANT
+            - REQUEST
+        bookingStatus:
+          type: string
+          enum:
+            - REQUESTED
+            - APPROVED
+            - REJECTED
+            - CANCELLED
+            - CHECK_IN_PENDING
+            - CHECKED_IN
+            - CHECKED_OUT
+            - NO_SHOW
+        paymentStatus:
+          type: string
+          enum:
+            - NOT_REQUIRED
+            - PENDING
+            - MARKED_PAID
+        paymentReference:
+          type: string
+        paymentProofUrl:
+          type: string
+          format: uri
+        ownerApprovalTime:
+          type: string
+          format: date-time
+        userConfirmationTime:
+          type: string
+          format: date-time
+        notes:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+      required:
+        - id
+        - guestId
+        - propertyId
+        - checkInDate
+        - checkOutDate
+        - guestCount
+        - bookingMode
+        - bookingStatus
+        - paymentStatus
+        - createdAt
+
+    BookingCreate:
+      type: object
+      properties:
+        guestId:
+          type: integer
+        propertyId:
+          type: integer
+        checkInDate:
+          type: string
+          format: date
+        checkOutDate:
+          type: string
+          format: date
+        guestCount:
+          type: integer
+        bookingMode:
+          type: string
+          enum:
+            - INSTANT
+            - REQUEST
+      required:
+        - guestId
+        - propertyId
+        - checkInDate
+        - checkOutDate
+        - guestCount
+        - bookingMode
+
+    BookingStatusUpdate:
+      type: object
+      properties:
+        bookingStatus:
+          type: string
+          enum:
+            - REQUESTED
+            - APPROVED
+            - REJECTED
+            - CANCELLED
+            - CHECK_IN_PENDING
+            - CHECKED_IN
+            - CHECKED_OUT
+            - NO_SHOW
+        paymentStatus:
+          type: string
+          enum:
+            - NOT_REQUIRED
+            - PENDING
+            - MARKED_PAID
+      required:
+        - bookingStatus
+
+    Review:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        propertyId:
+          type: integer
+        rating:
+          type: integer
+        comment:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - userId
+        - propertyId
+        - rating
+        - createdAt
+
+    ReviewCreate:
+      type: object
+      properties:
+        userId:
+          type: integer
+        propertyId:
+          type: integer
+        rating:
+          type: integer
+        comment:
+          type: string
+      required:
+        - userId
+        - propertyId
+        - rating
+
+tags:
+  - name: Users
+    description: Operations on users
+  - name: Properties
+    description: Operations on property listings
+  - name: Bookings
+    description: Operations on bookings
+  - name: Reviews
+    description: Operations on reviews
