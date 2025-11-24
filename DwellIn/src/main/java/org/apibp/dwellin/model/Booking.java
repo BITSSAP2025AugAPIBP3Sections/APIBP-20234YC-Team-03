@@ -70,4 +70,22 @@ public class Booking {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    public enum BookingStatus {
+        REQUESTED,
+        APPROVED,
+        REJECTED,
+        CANCELLED,
+        CHECK_IN_PENDING,
+        CHECKED_IN,
+        CHECKED_OUT,
+        NO_SHOW
+    }
+
+    public enum PaymentStatus {
+        NOT_REQUIRED,
+        PENDING,
+        MARKED_PAID
+    }
 }
+ 
