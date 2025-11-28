@@ -38,5 +38,7 @@ public class PropertyOwner {
     private String address;
 
     private String aadharNo;
+
+    private boolean isValidated;
 }
  
