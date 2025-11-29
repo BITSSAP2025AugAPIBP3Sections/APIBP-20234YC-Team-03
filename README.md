@@ -7,7 +7,7 @@ It helps users find the ideal retreat — be it a beachfront hideaway, a stylish
 ---
 
 ## Aim
-To design and implement a Spring Boot (Java) application offering both REST and GraphQL APIs for a lodging and homestay booking system.
+To design and implement a Spring Boot (Java) application offering APIs for a lodging and homestay booking system.
 
 ---
 
