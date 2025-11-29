@@ -1,10 +1,11 @@
 package org.apibp.dwellin.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.time.LocalDate;
 
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 @Table(name = "bookings")
 @Data
@@ -26,49 +27,38 @@ public class Booking {
     @JoinColumn(name = "property_id", nullable = false)
     private Property property;
 
-    @Column(name = "check_in_date", nullable = false)
-    private LocalDate checkInDate;
+    @Column(nullable = false)
+    private LocalDateTime checkIn;
 
-    @Column(name = "check_out_date", nullable = false)
-    private LocalDate checkOutDate;
+    @Column(nullable = false)
+    private LocalDateTime checkOut;
 
-    @Column(name = "guest_count", nullable = false)
+    @Column(nullable = false)
     private Integer guestCount;
 
-    @Column(name = "booking_mode", nullable = false)
-    private String bookingMode;   // INSTANT | REQUEST
+    @Column(nullable = false)
+    private String bookingMode; // INSTANT | REQUEST
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "booking_status", nullable = false)
+    @Column(nullable = false)
     private BookingStatus bookingStatus;
-    // REQUESTED | APPROVED | REJECTED | CANCELLED | CHECKED_IN | CHECKED_OUT
 
-    // For showing that user paid to owner (not in-app payment)
     @Enumerated(EnumType.STRING)
-    @Column(name = "payment_status", nullable = false)
+    @Column(nullable = false)
     private PaymentStatus paymentStatus;
-    // NOT_REQUIRED | PENDING | MARKED_PAID
 
-    // Owner uploads / enters proof or transaction reference (OPTIONAL)
-    @Column(name = "payment_reference")
-    private String paymentReference; // UPI ref id / internal note
+    private String paymentReference;
+    private String paymentProofUrl;
 
-    @Column(name = "payment_proof_url")
-    private String paymentProofUrl; // optional screenshot/PDF in S3
-
-    @Column(name = "owner_approval_time")
     private LocalDateTime ownerApprovalTime;
+    private LocalDateTime userConfirmationTime;
 
-    @Column(name = "user_confirmation_time")
-    private LocalDateTime userConfirmationTime; // if needed
-
-    @Column(name = "notes", length = 1000)
+    @Column(length = 1000)
     private String notes;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     public enum BookingStatus {
@@ -88,4 +78,3 @@ public class Booking {
         MARKED_PAID
     }
 }
- 

@@ -1,9 +1,11 @@
 package org.apibp.dwellin.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 @Table(name = "reviews")
 @Data
@@ -26,36 +28,30 @@ public class Review {
     private Property property;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "booking_id")
+    @JoinColumn(name = "booking_id", nullable = false)
     private Booking booking;
 
-    @Column(name = "rating", nullable = false)
-    private Integer rating; // 1-5
+    @Column(nullable = false)
+    private Integer rating;
 
-    @Column(name = "comment", length = 2000)
+    @Column(length = 2000)
     private String comment;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "review_type", nullable = false)
+    @Column(nullable = false)
     private ReviewType reviewType;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
+    @Column(nullable = false)
     private ReviewStatus status;
 
-    @Column(name = "is_anonymous")
     private Boolean isAnonymous;
-
-    @Column(name = "host_response", length = 2000)
     private String hostResponse;
-
-    @Column(name = "host_response_date")
     private LocalDateTime hostResponseDate;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     public enum ReviewType {
@@ -71,4 +67,3 @@ public class Review {
         UNDER_REVIEW
     }
 }
- 
